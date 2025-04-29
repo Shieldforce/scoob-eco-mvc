@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Variables ------------------------------------------------------------------------------------------------------------
+path_dir="${0%/*}"
+
+# Global variables -----------------------------------------------------------------------------------------------------
+declare -x path_dir
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+if [[ $# -lt 1 ]]; then
+  echo "";
+  # Chama o icon se não for passado argumentos!
+  bash $path_dir/progs/icon.sh
+  # Chama o help se não for passado argumentos!
+  bash $path_dir/progs/help.sh
+  echo "";
+fi
+
+COUNT=0
+for ARG in "$@"; do
+  COUNT=`expr $COUNT + 1`
+
+  # Chama o help se passado o argumento --help!
+  if [[ "$ARG" == *--help* ]]; then
+    echo "";
+    bash $path_dir/progs/help.sh
+    echo "";
+  fi
+
+  # Chama a execução do tipo se passado o argumento --type!
+  if [[ "$ARG" == *--type* ]]; then
+    echo "";
+    bash $path_dir/progs/type.sh "$@"
+    echo "";
+  fi
+
+  # Chama a deleção de container e image se passado o argumento --docker-remove!
+  if [[ "$ARG" == *--docker-remove* ]]; then
+    echo "";
+    bash $path_dir/progs/docker-remove.sh "$@"
+    echo "";
+  fi
+
+  # Chama a deleção de container e image se passado o argumento --docker-remove!
+  if [[ "$ARG" == *--docker-prune* ]]; then
+    echo "";
+    bash $path_dir/progs/docker-prune.sh "$@"
+    echo "";
+  fi
+
+  # Modo composer do scoob
+  if [[ "$ARG" == *--composer* ]]; then
+    echo "";
+    bash $path_dir/progs/scoob-composer.sh "$@"
+    echo "";
+  fi
+
+  # Scoob mysql
+    if [[ "$ARG" == *--mysql-ext* ]]; then
+      echo "";
+      bash $path_dir/progs/scoob-mysql.sh "$@"
+      echo "";
+    fi
+done
+
+
+

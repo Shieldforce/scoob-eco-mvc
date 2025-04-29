@@ -1,0 +1,24 @@
+{
+    "name": "shieldforce/scoob-eco-mvc",
+    "description": "Framework php, liberdade em desenvolver software.",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ScoobEco\\": "app/",
+            "ScoobEcoCore\\": "core/"
+        },
+        "files":[
+            "core/Helper/system.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Alexandre Ferreira",
+            "email": "shieldforce2@gmail.com"
+        }
+    ],
+    "require": {
+        "shieldforce/scoob": "^3.2"
+    }
+}
