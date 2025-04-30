@@ -2,6 +2,7 @@
 
 use JetBrains\PhpStorm\NoReturn;
 use ScoobEcoCore\Enum\ErrorType;
+use ScoobEcoCore\Support\Config;
 
 if (!function_exists('env')) {
     function env(string $key, mixed $default = null): mixed
@@ -76,6 +77,49 @@ if (!function_exists('asset')) {
     function asset(string $path): string
     {
         return '/' . ltrim($path, '/');
+    }
+}
+
+if (!function_exists('isJsonRequest')) {
+    function isJsonRequest(): bool
+    {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+            $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+    }
+}
+
+if (!function_exists('scoob_input_token')) {
+    function scoob_input_token(): string
+    {
+        $token = Config::get("app.token");
+        return "<input type='hidden' name='_token' value='{$token}' />";
+    }
+}
+
+if (!function_exists('scoob_token')) {
+    function scoob_token(): string
+    {
+        $token = Config::get("app.token");
+        return $token;
+    }
+}
+
+if (!function_exists('route')) {
+    function route(
+        string $name,
+        ?array $parameters = []
+    ): string
+    {
+        $route = \ScoobEcoCore\Support\RouteConverter::run($name);
+        $uri   = $route["uri"];
+
+        if (count($parameters) > 0) {
+            foreach ($parameters as $key => $value) {
+                $uri = preg_replace("/\{.*?\}/", $value, $uri, 1);
+            }
+        }
+
+        return $uri;
     }
 }
 

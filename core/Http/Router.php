@@ -138,4 +138,9 @@ class Router
             );
     }
 
+    public static function getRoutes(): array
+    {
+        return (new Router(self::$someRequest))->routes;
+    }
+
 }

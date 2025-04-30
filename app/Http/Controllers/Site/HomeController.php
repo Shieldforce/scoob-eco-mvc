@@ -2,8 +2,11 @@
 
 namespace ScoobEco\Http\Controllers\Site;
 
+use Exception;
+use ScoobEcoCore\Enum\ResponseType;
 use ScoobEcoCore\Http\BaseController;
 use ScoobEcoCore\Http\Request;
+use ScoobEcoCore\Http\Response;
 
 class HomeController extends BaseController
 {
@@ -20,11 +23,6 @@ class HomeController extends BaseController
         );
     }
 
-    public function userSave(Request $request)
-    {
-        //
-    }
-
     public function login(Request $request)
     {
         $title = 'Login';
@@ -36,5 +34,24 @@ class HomeController extends BaseController
                 'title'
             )
         );
+    }
+
+    public function loginRun(Request $request)
+    {
+        try {
+            return Response::return(
+                $request,
+                ResponseType::success,
+                "Login realizado com sucesso!",
+                200
+            );
+        } catch (Exception $e) {
+            return Response::return(
+                $request,
+                ResponseType::error,
+                "Erro ao realizar login!",
+                500
+            );
+        }
     }
 }

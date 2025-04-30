@@ -15,7 +15,12 @@
                                     alt="Logo"
                                 >
                             </a>
-                            <form action="#">
+                            <form
+                                action="{{ route("pages.site.loginRun") }}"
+                                method="POST"
+                                id="formIdSubmitGlobal"
+                            >
+                                {{ scoob_input_token() }}
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
