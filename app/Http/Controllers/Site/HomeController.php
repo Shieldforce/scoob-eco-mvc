@@ -24,4 +24,17 @@ class HomeController extends BaseController
     {
         //
     }
+
+    public function login(Request $request)
+    {
+        $title = 'Login';
+
+        return view(
+            $request->currentRoute["name"],
+            compact(
+                'request',
+                'title'
+            )
+        );
+    }
 }

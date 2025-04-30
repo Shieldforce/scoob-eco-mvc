@@ -17,4 +17,10 @@ return [
             new ClearFormMiddleware,
         ],
     ],
+    "/login" => [
+        "action"      => "ScoobEco\Http\Controllers\Site\HomeController@login",
+        "name"        => "pages.site.login",
+        "method"      => "get",
+        "middlewares" => [],
+    ],
 ];

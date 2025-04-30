@@ -66,8 +66,16 @@ if (!function_exists('styleError')) {
 }
 
 if (!function_exists('view')) {
-    function view(string $routeName, array $data = []): string {
+    function view(string $routeName, array $data = []): string
+    {
         return \ScoobEcoCore\Http\BaseController::view($routeName, $data);
+    }
+}
+
+if (!function_exists('asset')) {
+    function asset(string $path): string
+    {
+        return '/' . ltrim($path, '/');
     }
 }
 
