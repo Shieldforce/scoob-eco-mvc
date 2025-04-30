@@ -2,17 +2,26 @@
 
 namespace ScoobEco\Http\Controllers\Site;
 
+use ScoobEcoCore\Http\BaseController;
 use ScoobEcoCore\Http\Request;
 
-class HomeController
+class HomeController extends BaseController
 {
     public function index(Request $request)
     {
-        dd("index");
+        $title = 'Home';
+
+        return view(
+            $request->currentRoute["name"],
+            compact(
+                'request',
+                'title'
+            )
+        );
     }
 
     public function userSave(Request $request)
     {
-        dd("userSave");
+        //
     }
 }

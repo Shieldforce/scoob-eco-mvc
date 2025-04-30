@@ -1,0 +1,102 @@
+:root {
+    --cor-fundo-primaria: #323232;
+    --cor-fundo-secundaria: rgba(0, 0, 0, 0.2);
+    --cor-erro-p1: firebrick;
+    --cor-erro-p2: pink;
+    --cor-rosa-1: rgba(255, 192, 203, 0.8);
+    --cor-white-1: white;
+    --border-radius: 8px;
+    --font-manu: 'Caveat';
+}
+
+body {
+    background: var(--cor-fundo-primaria);
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    color: var(--cor-erro-p2);
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.container {
+    background: var(--cor-erro-p1);
+    padding: 2rem;
+    margin: 2rem auto;
+    border-radius: var(--border-radius);
+    width: 93%;
+    height: 100%;
+    box-shadow: 0 0 10px var(--cor-fundo-secundaria);
+}
+
+.flex-container {
+    margin: 0;
+    padding: 5px;
+    display: flex;
+    background: var(--cor-rosa-1);
+    border-radius: var(--border-radius);
+}
+
+.box {
+    margin: 0;
+    padding: 0;
+    flex: 1;
+}
+
+.title-error-h2 {
+    padding: 0;
+    margin: 0;
+    color: var(--cor-erro-p1);
+}
+
+.title-error-a {
+    padding: 0;
+    margin: 0;
+    color: var(--cor-rosa-1);
+}
+
+.title-cor-white-1 {
+    padding: 0;
+    margin: 0;
+    color: var(--cor-white-1);
+}
+
+.fonte-manu {
+    font-family: var(--font-manu), cursive;
+}
+
+.fonte-1 {
+    font-size: 12pt;
+}
+
+.fonte-2 {
+    font-size: 16pt;
+}
+
+.fonte-3 {
+    font-size: 20pt;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--cor-erro-p2);
+    margin: 1rem 0;
+}
+
+p {
+    margin: 0.5rem 0;
+}
+
+.linha-error-code-1 {
+    border: 1px dashed var(--cor-erro-p2);
+    border-radius: var(--border-radius);
+    padding: 10px;
+    background: rgba(0,0,0,0.4);
+}
+
+.linha-error-code-2 {
+    border: 1px dashed var(--cor-erro-p2);
+    border-radius: var(--border-radius);
+    padding: 10px;
+    background: var(--cor-fundo-secundaria);
+}

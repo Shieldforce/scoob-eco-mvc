@@ -2,6 +2,8 @@
 
 namespace ScoobEcoCore\Boot;
 
+use ScoobEcoCore\Enum\ErrorType;
+use ScoobEcoCore\Exception\ErrorHandler;
 use ScoobEcoCore\Http\BaseMiddleware;
 use ScoobEcoCore\Http\Request;
 use ScoobEcoCore\Http\Router;
@@ -25,7 +27,10 @@ class Start
             $this->loadRouter();
 
         } catch (Throwable $th) {
-            dd($th);
+            ErrorHandler::handle(
+                $th,
+                ErrorType::fromCodeOrDefault($th->getCode()),
+            );
         }
 
     }

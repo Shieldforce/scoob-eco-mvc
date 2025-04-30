@@ -1,5 +1,8 @@
 <?php
 
+use JetBrains\PhpStorm\NoReturn;
+use ScoobEcoCore\Enum\ErrorType;
+
 if (!function_exists('env')) {
     function env(string $key, mixed $default = null): mixed
     {
@@ -38,3 +41,33 @@ if (!function_exists('dd')) {
         die();
     }
 }
+
+if (!function_exists('ddError')) {
+    function ddError(
+        ?Throwable $throwable = null,
+        ?ErrorType $errorType = null,
+    )
+    {
+        if (isset($errorType) && isset($throwable)) {
+            styleError($throwable, $errorType);
+        }
+    }
+}
+
+if (!function_exists('styleError')) {
+    #[NoReturn]
+    function styleError(
+        ?Throwable $throwable = null,
+        ?ErrorType $errorType = null,
+    ): void
+    {
+        require __DIR__ . "/../Exception/PageError/index.blade.php";
+    }
+}
+
+if (!function_exists('view')) {
+    function view(string $routeName, array $data = []): string {
+        return \ScoobEcoCore\Http\BaseController::view($routeName, $data);
+    }
+}
+
