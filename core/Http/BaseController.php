@@ -33,24 +33,10 @@ class BaseController
 
         $template = file_get_contents($pathFile);
 
-        $template = preg_replace_callback('/\{\{\s*(.*?)\s*\}\}/', function ($matches) {
-            $expression = trim($matches[1]);
-            return "<?= $expression ?>";
-        }, $template);
+        $template = $this->tagPhp($template);
 
-        $template = preg_replace_callback(
-            '/@include\([\'"](.+?)[\'"]\)/',
-            function ($matches) use ($pathFile) {
-                $includePath     = "/var/www/pages" .
-                    DIRECTORY_SEPARATOR .
-                    str_replace(".", "/", $matches[1]) . ".blade.php";
-                $templateInclude = file_get_contents($includePath);
-                $templateInclude = preg_replace_callback('/\{\{\s*(.*?)\s*\}\}/', function ($matches) {
-                    $expression = trim($matches[1]);
-                    return "<?= $expression ?>";
-                }, $templateInclude);
-                return $templateInclude;
-            }, $template);
+        $pattern  = '/@include\([\'"](.+?)[\'"]\)/';
+        $template = $this->includes($template, $pattern);
 
         $tempPath = tempnam(sys_get_temp_dir(), 'tpl_') . '.blade.php';
 
@@ -61,6 +47,45 @@ class BaseController
         include $tempPath;
 
         return ob_get_clean();
+    }
+
+    public function includes(string $template, string $pattern)
+    {
+        do {
+            $original = $template;
+
+            $template = preg_replace_callback(
+                $pattern,
+                function ($matches) use ($pattern) {
+                    $includePath = "/var/www/pages" . DIRECTORY_SEPARATOR .
+                        str_replace(".", "/", $matches[1]) . ".blade.php";
+
+                    if (!file_exists($includePath)) {
+                        throw new Exception("Template file not found: {$includePath}");
+                    }
+
+                    $templateInclude = file_get_contents($includePath);
+
+                    $templateInclude = $this->includes($templateInclude, $pattern);
+
+                    $templateInclude = $this->tagPhp($templateInclude);
+
+                    return $templateInclude;
+                },
+                $template
+            );
+
+        } while ($template !== $original);
+
+        return $template;
+    }
+
+    public function tagPhp($template) {
+        return preg_replace_callback(
+            '/\{\{\s*(.*?)\s*\}\}/',
+            fn($m) => "<?= " . trim($m[1]) . " ?>",
+            $template
+        );
     }
 
 }

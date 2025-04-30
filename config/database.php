@@ -1,5 +1,5 @@
 <?php
 
 return [
-    "name" => env("DB_DRIVER") ?? 'mysql',
+    "name" => env("DB_DRIVER", 'mysql'),
 ];

@@ -14,3 +14,4 @@
 <script src="{{ asset('dostart/assets/js/YTPlayer.min.js') }}"></script>
 <script src="{{ asset('dostart/assets/js/validnavs.js') }}"></script>
 <script src="{{ asset('dostart/assets/js/main.js') }}"></script>
+@include("alerts.sweetalert2")

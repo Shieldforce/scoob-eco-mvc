@@ -1,6 +1,5 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-
     function loadingScoob(
         title = 'Sem título',
         html = "<span>Sem descrição</span>",
