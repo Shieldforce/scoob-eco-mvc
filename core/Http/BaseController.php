@@ -6,7 +6,6 @@ use Exception;
 
 class BaseController
 {
-
     public static function view(string $routeName, array $params = []): string
     {
         $routeReplace = str_replace(["."], ["/"], $routeName);
