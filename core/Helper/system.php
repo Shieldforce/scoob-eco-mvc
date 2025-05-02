@@ -28,7 +28,7 @@ if (!function_exists('env')) {
 
 if (!function_exists('dd')) {
     function dd(
-        mixed $keys
+        mixed ...$keys
     ): void
     {
         http_response_code(500);

@@ -3,7 +3,6 @@
 namespace ScoobEcoCore\Http;
 
 use Exception;
-use Throwable;
 
 class Router
 {
@@ -66,47 +65,50 @@ class Router
             return ["ok" => false];
         }
 
-        $newRoutePath        = $route['path'];
-        $params["variables"] = [];
-        $params["match"]     = [];
+        $seg = $this->extractSegmentsUrl(
+            $route["path"],
+            $requestUri,
+            '/\/?{(.*?)\??}/'
+        );
 
-        $patternParams = "/\/?{(.*?)\??}/";
-
-        if (preg_match_all($patternParams, $newRoutePath, $matches)) {
-
-            $newRoutePath        = preg_replace($patternParams, '(?:/(.*))?', $newRoutePath);
-            $params["match"]     = array_merge($params["match"], $matches[1]);
-            $params["variables"] = array_merge($params["variables"], $matches[0]);
+        if (!$seg["ok"]) {
+            return ["ok" => false];
         }
 
-        $patternRoute = "/^" . str_replace("/", "\/", $newRoutePath) . "$/";
-
-        if (preg_match($patternRoute, $requestUri, $matches)) {
-            unset($matches[0]);
-
-            $keys          = $params["match"];
-            $matchesParams = explode("/", $matches[1]);
-            $params        = $this->matchArrayCombine($matchesParams, $keys);
-
-            return [
-                "ok"     => true,
-                "params" => $params,
-            ];
-        }
-
-        return ["ok" => false];
+        return [
+            "ok"     => true,
+            "params" => $seg["params"] ?? [],
+        ];
     }
 
-    protected function matchArrayCombine($matchesParams, $keys)
+    protected function extractSegmentsUrl(string $path, string $uri, string $pattern)
     {
-        try {
-            $match = (count($keys) > 0 && count($matchesParams) > 0) ?
-                array_combine($keys, $matchesParams) :
-                [];
-            return $match;
-        } catch (Throwable $e) {
-            throw new Exception("Route not found!", 404);
+        $segments           = array_values(array_filter(explode('/', $path)));
+        $segmentsUri        = array_values(array_filter(explode('/', $uri)));
+        $params             = [];
+        $matchedSegments    = [];
+        $matchedSegmentsUri = [];
+
+        if (count($segmentsUri) > count($segments)) {
+            return ["ok" => false];
         }
+
+        foreach ($segments as $index => $segment) {
+            if (preg_match($pattern, $segment, $match)) {
+                $matchedSegments[]    = 1;
+                $matchedSegmentsUri[] = 1;
+                $params[$match[1]]    = $segmentsUri[$index];
+                continue;
+            }
+
+            $matchedSegments[]    = $segment;
+            $matchedSegmentsUri[] = $segmentsUri[$index];
+        }
+
+        return [
+            "ok"     => $matchedSegments == $matchedSegmentsUri,
+            "params" => $params
+        ];
     }
 
     protected function verifyControllerExit(array $array, array $verify)
