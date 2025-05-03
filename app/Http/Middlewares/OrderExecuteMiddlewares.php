@@ -7,8 +7,8 @@ class OrderExecuteMiddlewares
     public static function run(): array
     {
         return [
-            new HttpMiddleware(),
-            new TokenVerifyMiddleware(),
+            HttpMiddleware::class,
+            TokenVerifyMiddleware::class,
         ];
     }
 }

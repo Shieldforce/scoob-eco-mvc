@@ -2,6 +2,7 @@
 
 namespace ScoobEcoCore\Http;
 
+use ReflectionClass;
 use ScoobEco\Http\Middlewares\OrderExecuteMiddlewares;
 
 class BaseMiddleware
@@ -17,31 +18,30 @@ class BaseMiddleware
 
     public function loadBootMiddlewares(): void
     {
-        $middlewaresFiles = glob(__DIR__ . "/../../app/Http/Middlewares/*.php");
+        $middlewaresFiles = glob(__DIR__ . "/BootMiddlewares/*.php");
         foreach ($middlewaresFiles as $middlewareFile) {
-            $xPath = explode("/", $middlewareFile);
-
-            $appPath        = $xPath[count($xPath) - 4];
+            $xPath          = explode("/", $middlewareFile);
             $httpPath       = $xPath[count($xPath) - 3];
             $middlewarePath = $xPath[count($xPath) - 2];
             $filePath       = $xPath[count($xPath) - 1];
             $join           = implode("\\", [
-                $appPath,
                 $httpPath,
                 $middlewarePath,
                 $filePath,
             ]);
 
             $join      = str_replace([".php"], [""], $join);
-            $className = "ScoobEco\\{$join}";
+            $className = "ScoobEcoCore\\{$join}";
 
             if (class_exists($className)) {
-                self::addMiddlewares(new $className($this->request));
+                $middleware = new $className();
+                self::addMiddlewares($middleware);
+                $middleware->handle($this->request);
             }
         }
     }
 
-    public function getMiddlewares(): array
+    public static function getMiddlewares(): array
     {
         return self::$middlewares;
     }
@@ -56,14 +56,18 @@ class BaseMiddleware
     {
         $list = OrderExecuteMiddlewares::run();
         foreach ($list as $middleware) {
-            $middleware->handle($this->request);
+            $class = new $middleware();
+            self::addMiddlewares($class);
+            $class->handle($this->request);
         }
     }
 
     public function executeRouteMiddlewares($routesMiddlewares): void
     {
         foreach ($routesMiddlewares as $routeMiddleware) {
-            $routeMiddleware->handle($this->request);
+            $class = new $routeMiddleware();
+            self::addMiddlewares($class);
+            $class->handle($this->request);
         }
     }
 }

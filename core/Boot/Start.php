@@ -20,8 +20,10 @@ class Start
     public function __construct()
     {
         try {
+            session_start();
             $this->loadEnv();
             $this->loadConfig();
+            $this->loadSession();
             $this->loadRequest();
             $this->loadBootMiddlewares();
             $this->loadRouter();
@@ -60,6 +62,11 @@ class Start
     {
         $middleware = new BaseMiddleware($this->request);
         $middleware->executeMiddlewares();
+    }
+
+    protected function loadSession()
+    {
+        Session::start();
     }
 
 }

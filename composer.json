@@ -19,6 +19,7 @@
         }
     ],
     "require": {
-        "shieldforce/scoob": "^3.2"
+        "shieldforce/scoob": "^3.2",
+        "ext-openssl": "*"
     }
 }
