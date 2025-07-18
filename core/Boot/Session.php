@@ -11,6 +11,10 @@ class Session
     {
         $cryptRand = SimpleCrypt::encrypt((string)self::key());
 
+        if (self::diffTimeInMinutes() > Config::get("app.life_time")) {
+            self::end();
+        }
+
         if (!self::get("token")) {
             self::set([
                 "token" => $cryptRand,
@@ -21,10 +25,6 @@ class Session
                     "email" => "shieldforce2@gmail.com",
                 ],
             ]);
-        }
-
-        if (self::diffTimeInMinutes() > Config::get("app.life_time")) {
-            self::end();
         }
     }
 
