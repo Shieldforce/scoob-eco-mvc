@@ -9,40 +9,64 @@ class Session
 {
     public static function start()
     {
-        $rand      = rand(9999999, 99999999);
-        $cryptRand = SimpleCrypt::encrypt((string)$rand);
+        $cryptRand = SimpleCrypt::encrypt((string)self::key());
 
-        if (!self::get("scoob_session")) {
-            self::set("scoob_session", $cryptRand);
+        if (!self::get("token")) {
+            self::set([
+                "token" => $cryptRand,
+                "time"  => date("Y-m-d H:i:s"),
+                "user"  => [
+                    "id"    => "1",
+                    "name"  => "Alexandre Ferreira",
+                    "email" => "shieldforce2@gmail.com",
+                ],
+            ]);
         }
 
-        self::end();
+        if (self::diffTimeInMinutes() > Config::get("app.life_time")) {
+            self::end();
+        }
+    }
+
+    public static function diffTime()
+    {
+        $dateStartSession = date_create(self::get("time"));
+        $dateNow          = date_create(date("Y-m-d H:i:s"));
+        return date_diff($dateStartSession, $dateNow, true);
+    }
+
+    public static function diffTimeInMinutes()
+    {
+        return self::diffTime()->i ?? null;
     }
 
     public static function key()
     {
-        return Config::get("session.key");
+        return rand(9999999, 99999999);
     }
 
-    public static function set($key, $value)
+    public static function set(array $values)
     {
-        $_SESSION[$key] = $value;
+        $_SESSION["scoob_session"] = $values;
     }
 
-    public static function get(string $key)
+    public static function get(?string $key = null)
     {
-        return $_SESSION[$key];
+        return
+            $_SESSION["scoob_session"][$key] ??
+            $_SESSION["scoob_session"] ??
+            null;
     }
 
-    public static function destroy(string $key)
+    public static function destroy()
     {
-        if (isset($_SESSION[$key])) {
-            unset($_SESSION[$key]);
+        if (isset($_SESSION["scoob_session"])) {
+            unset($_SESSION["scoob_session"]);
         }
     }
 
     public static function end()
     {
-        // Session::destroy("scoob_session");
+        Session::destroy();
     }
 }

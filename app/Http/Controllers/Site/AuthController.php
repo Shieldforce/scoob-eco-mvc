@@ -3,6 +3,7 @@
 namespace ScoobEco\Http\Controllers\Site;
 
 use Exception;
+use ScoobEcoCore\Boot\Session;
 use ScoobEcoCore\Enum\ResponseType;
 use ScoobEcoCore\Http\BaseController;
 use ScoobEcoCore\Http\Request;
@@ -26,6 +27,9 @@ class AuthController extends BaseController
     public function loginRun(Request $request)
     {
         try {
+
+            dd(Session::get());
+
             return Response::return(
                 $request,
                 ResponseType::success,
