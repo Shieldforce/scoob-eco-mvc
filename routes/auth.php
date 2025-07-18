@@ -1,6 +1,7 @@
 <?php
 
 use ScoobEco\Http\Middlewares\ClearFormMiddleware;
+use ScoobEco\Http\Middlewares\Validation\LoginValidationMiddleware;
 
 return [
     "/login"     => [
@@ -15,6 +16,7 @@ return [
         "method"      => "post",
         "middlewares" => [
             ClearFormMiddleware::class,
+            LoginValidationMiddleware::class,
         ],
     ],
 ];

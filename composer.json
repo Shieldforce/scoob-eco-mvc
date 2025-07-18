@@ -19,6 +19,7 @@
         }
     ],
     "require": {
+        "php": "^8.4",
         "shieldforce/scoob": "^3.2",
         "ext-openssl": "*"
     }
