@@ -1,26 +1,27 @@
 {
-    "name": "shieldforce/scoob-eco-mvc",
-    "description": "Framework php, liberdade em desenvolver software.",
-    "type": "project",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "ScoobEco\\": "app/",
-            "ScoobEcoCore\\": "core/"
-        },
-        "files":[
-            "core/Helper/system.php"
-        ]
+  "name": "shieldforce/scoob-eco-mvc",
+  "description": "Framework php, liberdade em desenvolver software.",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "ScoobEco\\": "app/",
+      "ScoobEcoCore\\": "core/"
     },
-    "authors": [
-        {
-            "name": "Alexandre Ferreira",
-            "email": "shieldforce2@gmail.com"
-        }
-    ],
-    "require": {
-        "php": "^8.4",
-        "shieldforce/scoob": "^3.2",
-        "ext-openssl": "*"
+    "files": [
+      "core/Helper/system.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Alexandre Ferreira",
+      "email": "shieldforce2@gmail.com"
     }
+  ],
+  "require": {
+    "php": "^8.4",
+    "shieldforce/scoob": "^3.2",
+    "ext-openssl": "*",
+    "ext-pdo": "*"
+  }
 }
