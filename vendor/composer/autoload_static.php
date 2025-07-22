@@ -15,6 +15,7 @@ class ComposerStaticInitcd7d1c0533c9c95c9c303bc6656978f0
         array (
             'Shieldforce\\Scoob\\' => 18,
             'ScoobEco\\' => 9,
+            'ScoobEcoSql\\' => 12,
             'ScoobEcoCore\\' => 13,
         ),
     );
@@ -27,6 +28,10 @@ class ComposerStaticInitcd7d1c0533c9c95c9c303bc6656978f0
         'ScoobEco\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
+        ),
+        'ScoobEcoSql\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/sql',
         ),
         'ScoobEcoCore\\' => 
         array (

@@ -8,5 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'Shieldforce\\Scoob\\' => array($vendorDir . '/shieldforce/scoob/src'),
     'ScoobEco\\' => array($baseDir . '/app'),
+    'ScoobEcoSql\\' => array($baseDir . '/sql'),
     'ScoobEcoCore\\' => array($baseDir . '/core'),
 );

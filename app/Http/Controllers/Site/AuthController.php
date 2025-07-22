@@ -3,9 +3,7 @@
 namespace ScoobEco\Http\Controllers\Site;
 
 use Exception;
-use ScoobEcoCore\Boot\Session;
 use ScoobEcoCore\Database\DB;
-use ScoobEcoCore\Database\MysqlDriver;
 use ScoobEcoCore\Enum\ResponseType;
 use ScoobEcoCore\Http\BaseController;
 use ScoobEcoCore\Http\Request;
@@ -30,7 +28,11 @@ class AuthController extends BaseController
     {
         try {
 
-            dd(DB::connection());
+            //$db = new DB();
+            //$userGet = $db->table("users")->get();
+            //$userFirst = $db->table("users")->first();
+            //$userFind = $db->table("users")->find(1);
+            //dd($userGet);
 
             return Response::return(
                 $request,

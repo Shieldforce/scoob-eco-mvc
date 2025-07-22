@@ -2,26 +2,32 @@
 
 namespace ScoobEcoCore\Database;
 
+use ScoobEcoCore\Database\Mysql\DBx;
 use ScoobEcoCore\Support\Config;
 
 class DB
 {
-    public static function connection()
+    use DBx;
+
+    public static         $connection = null;
+    public static string  $driver;
+    private static string $table;
+
+    public function __construct()
     {
-        $driver = Config::get("database.default_driver");
 
-        if ($driver == "mysql") {
-            return MysqlDriver::getInstance();
+        self::$driver = Config::get("database.default_driver");
+
+        if (self::$driver == "mysql") {
+            self::$connection = MysqlDriver::getInstance();
         }
 
-        if ($driver == "sqlite") {
-            return SqliteDriver::getInstance();
+        if (self::$driver == "sqlite") {
+            self::$connection = SqliteDriver::getInstance();
         }
 
-        if ($driver == "sqlsrv") {
-            return SqlSrvDriver::getInstance();
+        if (self::$driver == "sqlsrv") {
+            self::$connection = SqlSrvDriver::getInstance();
         }
-
-        return null;
     }
 }
