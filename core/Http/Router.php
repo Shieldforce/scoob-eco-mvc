@@ -3,6 +3,7 @@
 namespace ScoobEcoCore\Http;
 
 use Exception;
+use ReflectionNamedType;
 
 class Router
 {
@@ -97,7 +98,7 @@ class Router
             if (preg_match($pattern, $segment, $match)) {
                 $matchedSegments[]    = 1;
                 $matchedSegmentsUri[] = 1;
-                $params[$match[1]]    = $segmentsUri[$index];
+                $params[$match[1]]    = $segmentsUri[$index] == "%7B1d2" ? null : $segmentsUri[$index];
                 continue;
             }
 
@@ -115,29 +116,79 @@ class Router
     {
         [
             $controller,
-            $method,
+            $method
         ] = explode("@", $array["action"]);
 
         if (!class_exists($controller)) {
-            throw new Exception(
-                "Controller not found: {$controller}",
-                404
-            );
+            throw new Exception("Controller not found: {$controller}", 404);
         }
 
         if (!method_exists($controller, $method)) {
+            throw new Exception("Method not found: {$controller} -> {$method}", 404);
+        }
+
+        $instance = new $controller();
+
+        $reflection   = new \ReflectionMethod($instance, $method);
+        $paramsToPass = [];
+
+        $paramsToPass = $this->mountParamsToPass(
+            $reflection,
+            $paramsToPass,
+            $controller,
+            $method,
+            $verify
+        );
+
+        return $reflection->invokeArgs($instance, $paramsToPass);
+    }
+
+    protected function mountParamsToPass(
+        $reflection,
+        $paramsToPass,
+        $controller,
+        $method,
+        $verify
+    )
+    {
+
+        foreach ($reflection->getParameters() as $index => $param) {
+
+            if (
+                isset($verify["params"][$param->getName()]) ||
+                in_array($param->getName(), array_keys($verify["params"]))
+            ) {
+                $paramsToPass[] = $verify["params"][$param->getName()] ?? null;
+                continue;
+            }
+
+            if ($param->isDefaultValueAvailable()) {
+                $paramsToPass[] = $param->getDefaultValue();
+                continue;
+            }
+
+            $type = $param->getType();
+
+            if (isset($type) && is_object($type) && !$type->isBuiltin()) {
+                $className = $type->getName();
+            }
+
+            if (isset($className) && $className === Request::class) {
+                $paramsToPass[] = $this->request;
+                continue;
+            }
+
+            if (isset($className) && $className !== Request::class) {
+                $paramsToPass[] = new $className();
+                continue;
+            }
+
             throw new Exception(
-                "Method not found: {$controller} -> {$method}",
-                404
+                "Cannot resolve parameter \${$param->getName()} in {$controller}::{$method}()"
             );
         }
 
-        return (new $controller)
-            ->$method(
-                $this->request,
-                ...array_values($verify["params"]
-                )
-            );
+        return $paramsToPass;
     }
 
     public static function getRoutes(): array
